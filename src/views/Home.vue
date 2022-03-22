@@ -14,17 +14,19 @@ import InstagramCard from "@/components/InstagramCard.vue";
 let cards = [];
 
 cards = [
-  "https://picsum.photos/id/1/400/400",
-  "https://picsum.photos/id/2/400/400",
-  "https://picsum.photos/id/3/400/400",
-  "https://picsum.photos/id/4/400/400",
+  
 ];
 
 export default {
   name: "home",
   data: function () {
     return {
-      cards: cards,
+      cards: [
+ { title: 'jedan', time: 'an hour ago', url:
+'https://picsum.photos/id/1/400/400' },
+ { title: 'dva', time: '2 days ago', url:
+'https://picsum.photos/id/2/400/400' },
+ ]
     };
   },
   components: {
