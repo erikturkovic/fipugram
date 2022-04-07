@@ -53,7 +53,8 @@ email"
 </template>
 
 <script>
-import { firebase } from "@/firebase";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import app from "@/firebase";
 
 export default {
   name: "Signup",
@@ -66,16 +67,13 @@ export default {
   },
   methods: {
     signup() {
-      firebase
-        .auth()
-        .createUserWithEmailAndPassword(this.username, this.password)
-        .then(function () {
-          cnsole.log("registracija great success");
-        })
-        .catch(function (error) {
-          console.error("Greška:", error);
-        });
-      console.log("nastavak");
+      const auth = getAuth();
+      createUserWithEmailAndPassword(auth, this.username, this.password)
+        .then(() => console.log("Uspješna registracija"))
+        .catch((error) =>
+          alert("Odabrana šifra je prekratka, molim vas odaberite neku drugu")
+        );
+      console.log("Nastavak");
     },
   },
 };
