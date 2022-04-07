@@ -32,7 +32,7 @@ cards = [
   {
     title: "Slika #3",
     time: "few hours ago",
-    url: "https://picsum.photos/id/2/400/400",
+    url: "https://picsum.photos/id/3/400/400",
   },
 ];
 
