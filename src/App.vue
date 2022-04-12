@@ -26,14 +26,14 @@
           <li class="nav-item">
             <router-link to="/" class="nav-link">Home</router-link>
           </li>
-          <li class="nav-item">
+          <li v-if="!store.currentUser" class="nav-item">
             <router-link to="/login" class="nav-link">Login</router-link>
           </li>
-          <li class="nav-item">
+          <li v-if="!store.currentUser" class="nav-item">
             <router-link to="/signup" class="nav-link">Signup</router-link>
           </li>
-          <li class="nav-item">
-            <a @click="logout()" class="nav-link">Logout</a>
+          <li v-if="store.currentUser" class="nav-item">
+            <a href="#" @click.prevent="logout()" class="nav-link">Logout</a>
           </li>
         </ul>
         <form class="form-inline my-2 my-lg-0">
@@ -60,14 +60,18 @@ import router from "@/router";
 import app from "@/firebase";
 
 const auth = getAuth();
+const currentRoute = router.currentRoute;
 onAuthStateChanged(auth, (user) => {
   if (user) {
     console.log("***", user.email);
     store.currentUser = user.email;
+    if (!currentRoute.meta.needsUser) {
+      router.push({ name: "home" });
+    }
   } else {
     console.log("*** No user");
     store.currentUser = null;
-    if (router.name !== "Login") {
+    if (currentRoute.meta.needsUser) {
       router.push({ name: "Login" });
     }
   }
@@ -83,7 +87,9 @@ export default {
   methods: {
     logout() {
       const auth = getAuth();
-      signOut(auth);
+      signOut(auth).then(() => {
+        this.$router.push({ name: "login" });
+      });
     },
   },
 };
