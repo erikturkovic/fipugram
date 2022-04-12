@@ -32,6 +32,9 @@
           <li class="nav-item">
             <router-link to="/signup" class="nav-link">Signup</router-link>
           </li>
+          <li class="nav-item">
+            <a @click="logout()" class="nav-link">Logout</a>
+          </li>
         </ul>
         <form class="form-inline my-2 my-lg-0">
           <input
@@ -51,16 +54,39 @@
 </template>
 
 <script>
-import store from "@/store.js"
+import store from "@/store.js";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import router from "@/router";
+import app from "@/firebase";
 
-export default {
-  name:'app',
-  data(){
-    return{
-      store: store
+const auth = getAuth();
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    console.log("***", user.email);
+    store.currentUser = user.email;
+  } else {
+    console.log("*** No user");
+    store.currentUser = null;
+    if (router.name !== "Login") {
+      router.push({ name: "Login" });
     }
   }
-}
+});
+
+export default {
+  name: "app",
+  data() {
+    return {
+      store: store,
+    };
+  },
+  methods: {
+    logout() {
+      const auth = getAuth();
+      signOut(auth);
+    },
+  },
+};
 </script>
 
 <style lang="scss">
